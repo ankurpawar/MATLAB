@@ -56,7 +56,7 @@ close(h_msg);
 %cmap = colormap(winter);
 %cmap = colormap(spring);
 %cmap = colormap(bone);
-cmap = colormap(bone(iters));
+cmap = colormap(gray(iters));
 colormap(cmap);
 image(x,y,zvalues);
 axis tight

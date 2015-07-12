@@ -2,10 +2,10 @@
 %This script may take time to complete depending on the number
 %of iteratons and size of image
 %the fractal (z^3 - 2*z + 2)
-x = linspace(-1.5,1.5,800);
-y = linspace(-1.5,1.5,800);
+x = linspace(-1.5,1.5,500);
+y = linspace(-1.5,1.5,500);
 c = zeros(length(y),length(x));
-iters = 64;
+iters = 128;
 len_x = length(x);
 len_y = length(y);
 
@@ -26,7 +26,7 @@ for m=1:len_x*len_y
     
     k = 0;
     z = c(m);
-    rough1 = 0.06;
+    rough1 = 0.05;
     rough  = 0;
     while ((k <= iters)&&(abs(rough1)>0.05))
         z = z-(z*z*z - 2*z + 2)/(3*z*z - 2);
@@ -60,8 +60,8 @@ close(h_msg);
 %cmap = colormap(bone);
 cmap=flipud(colormap(bone(iters)));
 colormap(cmap);
-image(x,y,zvalues)
-axis tight square
+imagesc(x,y,zvalues);
+axis equal
 toc
 
 %remove comments '%' from 66-71 to save the image

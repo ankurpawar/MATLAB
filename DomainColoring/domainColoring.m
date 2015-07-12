@@ -3,8 +3,8 @@ function [hue, sat, val] = domainColoring(Z,type)
 %
 hue = (pi+angle(Z))/(2*pi);
 coloringType = type;
-x = imag(Z);
-y = real(Z);
+y = imag(Z);
+x = real(Z);
 switch coloringType
     case 1
         r = log(abs(Z))/(2*log(2));

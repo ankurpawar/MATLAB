@@ -1,6 +1,6 @@
 %Script to test domain coloring
-IMGWIDTH = 1000;
-IMGHEIGHT = 1000;
+IMGWIDTH = 500;
+IMGHEIGHT = 500;
 X = linspace(-pi,pi,IMGWIDTH);
 Y = linspace(-pi,pi,IMGHEIGHT);
 lenx = length(X);
@@ -9,7 +9,7 @@ Z = zeros(length(X),length(Y));
 colors = zeros(length(X),length(Y),3);
 col = zeros(1,3);
 for n = 1:lenx
-    Z(n,:) = Y(:)+i*X(n);
+    Z(n,:) = X(:)+i*Y(n);
 end
 img = zeros(IMGWIDTH,IMGHEIGHT,3);
 
@@ -19,7 +19,7 @@ img = zeros(IMGWIDTH,IMGHEIGHT,3);
 %funcz = Z.^Z; type = 2;
 %funcz = Z.^2 - 1./Z; type = 2;
 
-%funcz = (Z-1)./(Z+1); type = 3;
+funcz = (Z-1)./(Z+1); type = 3;
 %funcz = Z.^2 - 1./Z; type = 3;
 
 %funcz = Z.^Z; type = 4;
@@ -64,8 +64,7 @@ img = zeros(IMGWIDTH,IMGHEIGHT,3);
 %funcz = (Z.^2-1).*(Z-2*i).^2./(Z.^2+2+2*i); type = 17;
 %funcz = (1+Z)./(1-Z); type = 17;
 %funcz = (Z-1)./(Z+1); type = 17;
-%funcz = (Z.^1-1).^((1.5*i)/(0.5*pi)-0.1)./(Z.^1+1).^((1.5*i)/(0.5*pi)-0.1);
-%type = 17;
+%funcz = (Z.^1-1).^((1.5*i)/(0.5*pi)-0.1)./(Z.^1+1).^((1.5*i)/(0.5*pi)-0.1);type = 17;
 
 %funcz = (Z.^2-1).*(Z-2*i).^2./(Z.^2+2+2*i);; type = 18;
 %funcz = (1+Z)./(1-Z); type = 18;
@@ -127,7 +126,7 @@ img = zeros(IMGWIDTH,IMGHEIGHT,3);
 
 %funcz = (1+Z)./(1-Z); type = 28;
 %funcz = (i.*Z)-i./Z; type = 29;
-funcz = sin(pi+Z)+i; type = 30;
+%funcz = sin(pi+Z)+i; type = 30;
 
 [img(:,:,1), img(:,:,2), img(:,:,3)] = domainColoring(funcz, type);
 

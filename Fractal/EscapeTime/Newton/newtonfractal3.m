@@ -39,7 +39,7 @@ for m = 1:len_x*len_y
     zvalues(m) = k;
 end
 close(h_msg);
-ho = flipud(colormap(hot(iters)));
+ho = flipud(colormap(pink(iters)));
 colormap(ho);
 imagesc(x,y,zvalues);
 axis tight square
