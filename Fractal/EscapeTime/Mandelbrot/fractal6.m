@@ -1,70 +1,60 @@
-%Mandelbrot set
-%this script takes about 2 seconds
-%to complete the fractal
-%remove the comment in line 62 to 67
-%to save the fractal as a png file
-%the function ind2rgb8 takes sometime
- 
-   %x  =  linspace(-1.5,0.6,1000);
-   %y  =  linspace(-1.26,1.26,1000);
-x  =  linspace(-1.5,0.6,500);
-y  =  linspace(-1.26,1.26,500);
- iter = 250;
-len_x =  length(x);
-len_y =  length(y);
- xnew =  0; 
- ynew =  0;
-    a =  0;    
-    b =  0;
-   xn =  0;   
-   yn =  0;
-rough =  0;
-    c =  zeros(len_y,len_x);
- zval =  zeros(len_y,len_x);
+function fractal6
+% Mandelbrot set fractal
+
+% ouput image resolution, WIDTHxHEIGHT
+WIDTH = 2000; %number of points in x axis
+HEIGHT = 2000; %number of points in y axis
+
+% fractal x y range
+Y_MIN = -1.26;
+Y_MAX = 1.26;
+X_MIN = -1.5;
+X_MAX = 0.6;
+
+% maximum number of iterations
+MAX_ITERATION = 128;
+
+% Generate linearly spaced points from X_MIN to X_MAX
+x = linspace(X_MIN, X_MAX, WIDTH);
+% Generate linearly spaced points from Y_MIN to Y_MAX
+y = linspace(Y_MIN, Y_MAX, HEIGHT);
+
+% Create a linear 2d grid
+% X is 2d a array, column value are varying and row values are constant
+% Y is 2d a array, row value are varying and column values are constant
+[X Y] = meshgrid(x, y);
+
+% Allocate space for output
+zval = zeros(HEIGHT, WIDTH);
+xn =  0;
+yn =  0;
+xnew = 0;
+ynew = 0;
+a =  0;
+b =  0;
+nPoints = WIDTH * HEIGHT;
+
 h_msg =  msgbox(' Please Wait ',' ');
-
-for n=1:len_y
-
-    c(n,:)=y(n)+i*x(:);
-
-end
-
-tic
-for m=1:len_x*len_y
-     
-     a = imag(c(m)); 
-     b = real(c(m));
-    xn = 0;   
+tic %start timer
+for m = 1:nPoints
+    a = X(m);
+    b = Y(m);
+    xn = 0;
     yn = 0;
-     k = 0;
-     while (k<=iter)&&((xn^2+yn^2)<4)
-       xnew = xn^2 - yn^2 + a;
-       ynew = 2*xn*yn + b;  
-         xn = xnew;
-         yn = ynew;
-          k = k+1;
-     end
+    k = 1;
+    while (k <= MAX_ITERATION) && ((xn^2+yn^2) < 4)
+        xnew = xn^2 - yn^2 + a;
+        ynew = 2*xn*yn + b;
+        xn = xnew;
+        yn = ynew;
+        k = k+1;
+    end
     zval(m) = k;
-
 end
-toc
+toc %stop
 close(h_msg);
-cmap = flipud(bone(iter));%[bone(125);flipud(bone(125))];
-%you can also try any one of these colormaps
-%cmap = flipud(colormap(gray));  
-%cmap = flipud(colormap(copper));  
-%cmap = flipud(colormap(hot));  
-%cmap = flipud(colormap(bone));  
-%cmap = flipud(colormap(summer)); 
-%cmap = flipud(colormap(winter));  
-%cmap = flipud(colormap(pink));  
-%cmap = flipud(colormap(bone));    
+cmap = flipud(gray(MAX_ITERATION));
 colormap(cmap);
-image(x,y,zval)
-
-%clear x y c
-%cmap  = colormap;
-%imwrite(zval,cmap,'mandelw.png','png') ;
-
-
-
+image(x,y,zval); %show image
+imwrite(zval,cmap,'mandelbrotset.png','png'); %save image
+end
