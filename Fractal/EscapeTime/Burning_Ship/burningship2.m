@@ -1,62 +1,67 @@
-%author:Ankur Pawar
-%burning ship fractal
-%this script takes about 5 seconds to plot the fractal
-%remove comments from line 60 - 61 to save the figure as 
-%an image of resolution 2000x2000;
+function burningship2
+% Burning ship fractal
+% Function takes few seconds to complete the fractal. Image burningShip.png
+% will be saved in current directory.
 
-   y = linspace(-0.13,0.02,2000);
-   x = linspace(-1.8,-1.6,2000);
-len_x= length(x);
-len_y= length(y);
-iter = 100;   %number of iterations
-   m = 1;   
-   c = zeros(len_y,len_x);
-zval = zeros(len_y,len_x);
-xnew = 0; 
+% ouput image resolution, WIDTHxHEIGHT
+WIDTH = 2000; %number of points in x axis
+HEIGHT = 2000; %number of points in y axis
+
+% maximum number of iterations
+MAX_ITERATION = 256;
+
+% Burning ship fractal x y range
+X_MIN = -1.8;
+X_MAX = -1.6;
+Y_MIN = -0.13;
+Y_MAX = 0.02;
+
+%Generate linearly spaced points from X_MIN to X_MAX
+x = linspace(X_MIN, X_MAX, WIDTH);
+%Generate linearly spaced points from Y_MIN to Y_MAX
+y = linspace(Y_MIN, Y_MAX, HEIGHT);
+
+% Create a linear 2d grid
+% X is 2d a array, column value are varying and row values are constant
+% Y is 2d a array, row value are varying and column values are constant
+[X Y] = meshgrid(x,y);
+
+% Allocate space for output
+zval = zeros(HEIGHT, WIDTH);
+
+nPoints = WIDTH * HEIGHT;
+xnew = 0;
 ynew = 0;
-   a = 0;   
-   b = 0;
-  xn = 0;   
-  yn = 0;
-total= len_x*len_y;
+a = 0;
+b = 0;
+xn = 0;
+yn = 0;
 
-for m= 1:len_y
-   c(m,:) = y(m)+i*x(:);
+h_msg = msgbox('Please  wait...','');
+tic %start timer
+for n = 1:nPoints
+    a = X(n);
+    b = Y(n);
+    xn = 0;
+    yn = 0;
+    k  = 1;
+    while (k < MAX_ITERATION) && ((xn^2+yn^2) < 4)
+        xnew = xn^2 - yn^2 + a;
+        ynew = 2*abs(xn*yn)+ b;
+        xn = xnew;
+        yn = ynew;
+        k = k+1;
+    end
+    zval(n) = k;
 end
- 
-h_msg= msgbox('Please  wait...','');
-tic           %start timer
-
-
-for m = 1:total
-     a  = imag(c(m));
-     b  = real(c(m));
-     xn = 0;   
-     yn = 0;
-     k  = 0;
-     while (k<=iter)&&((xn^2+yn^2)<4)
-       xnew = xn^2 - yn^2 + a;
-       ynew = 2*abs(xn*yn)+ b;  % ynew = 2*xn*yn+ b; for mandelbrot set
-         xn = xnew;
-         yn = ynew;
-          k = k+1;
-     end
-     zval(m) = k;
-end
-toc          %stop timer
+toc %stop timer
 
 close(h_msg);
-%you can also try these colormaps
-%cmap = flipud(colormap(pink));  
-%cmap = flipud(fliplr(colormap(copper)));  
-%cmap = flipud(colormap(hot));  
-%cmap = flipud(colormap(gray));  
-%cmap = fliplr(colormap(autumn));  
-cmap = fliplr(flipud(colormap(bone)));  
+cmap = fliplr(flipud(colormap(bone(MAX_ITERATION))));
 colormap(cmap);
-image(x,y,zval);
-axis tight off
-
-%clear x y c
-%imwrite(zval, cmap ,'burn.png','png','source','Computer generated') ;
-
+image(zval);
+axis equal
+box on
+axis([0 WIDTH 0 HEIGHT]);
+imwrite(zval, cmap , 'burningShip.png','png');
+end
