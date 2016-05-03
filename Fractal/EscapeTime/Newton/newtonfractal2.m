@@ -63,8 +63,8 @@ imgMax = max(img(:));
 colors = fractalData(choice).cmap(imgMax);
 colormap(colors);
 imagesc(img);
-axis equal
-imwrite('newtonFractal');
+axis tight equal
+imwrite(img, colors, ['newtonFractal' num2str(choice) '.png']);
 
 end
 
@@ -107,10 +107,10 @@ newtonFracData(2).cmap = @(n)(1-bone(n));
 newtonFracData(3).range = [-5 5 -5 5];
 newtonFracData(3).iterate = 50;
 newtonFracData(3).tolerance = 0.0005;
-newtonFracData(3).func = @(z)(z - 1 /((0.4+0.9*i) * ...
-    i/(z-1)+1/(z+0.5 - 0.866i)...
+newtonFracData(3).func = @(z)(z - 1 /((0.4+0.9*i)...
+    /(z-1)+1/(z+0.5 - 0.866i)...
     +1/(z+0.5 + 0.866i)));
-newtonFracData(3).cmap = @(n)(jet(n));
+newtonFracData(3).cmap = @(n)(1-bone(n));
 
 newtonFracData(4).range = [-1.5 1.5 -1.5 1.5];
 newtonFracData(4).iterate = 30;
@@ -130,7 +130,7 @@ newtonFracData(6).range = [-0.4 0.4 -0.4 0.4];
 newtonFracData(6).iterate = 64;
 newtonFracData(6).tolerance = 0.0005;
 newtonFracData(6).func = @(z)(z - cos(z)/(-sin(z)));
-newtonFracData(6).cmap = @(n)(flipud(bone(n)));
+newtonFracData(6).cmap = @(n)(1-pink(n));
 
 newtonFracData(7).range = [-5 5 -5 5];
 newtonFracData(7).iterate = 40;
@@ -140,7 +140,7 @@ newtonFracData(7).func = @(z)(z - 1/(0.5/(z-1)...
 newtonFracData(7).cmap = @(n)(1-bone(n));
 
 newtonFracData(8).range = [-1 1 -1 1];
-newtonFracData(8).iterate = 128;
+newtonFracData(8).iterate = 50;
 newtonFracData(8).tolerance = 0.0005;
 newtonFracData(8).func = @(z)(z-(z^3 -2*z+2)/(3*z^2-2));
 newtonFracData(8).cmap = @(n)(flipud(bone(n)));
@@ -158,13 +158,13 @@ newtonFracData(10).func = @(z)(z - 1/((1+i)/(z+1)+(1+i)/(z-1)));
 newtonFracData(10).cmap = @(n)(bone(n));
 
 newtonFracData(11).range = [-2 2 -2 2];
-newtonFracData(11).iterate = 64;
+newtonFracData(11).iterate = 40;
 newtonFracData(11).tolerance = 0.0005;
 newtonFracData(11).func = @(z)(z - (z^3-1)/(3*z^2));
-newtonFracData(11).cmap = @(n)(flipud(bone(n)));
+newtonFracData(11).cmap = @(n)(flipud(hot(n)));
 
 newtonFracData(12).range = [-2 2 -2 2];
-newtonFracData(12).iterate = 64;
+newtonFracData(12).iterate = 50;
 newtonFracData(12).tolerance = 0.0005;
 newtonFracData(12).func = @(z)(z - (z^4-1)/(4*z^3));
 newtonFracData(12).cmap = @(n)(flipud(bone(n)));
