@@ -1,6 +1,27 @@
-function [hue, sat, val] = domainColoring(Z,type)
-% convert complex function Z to Hue, Sat and Val
-%
+function hsvImg = domainColoring(Z,type)
+% Function convert complex array Z to Hue, Sat and Val.
+% Usage
+% [hue, sat, val] = domainColoring(Z)
+% [hue, sat, val] = domainColoring(Z,type)
+% Input :
+% Z is a complex 2d array, type can be between 1 to 31.
+% When function is called with first parameter only then type is taken as
+% 31 by default.
+% Output :
+% hsvImg is a 3d array such that hsvImg(:,:,1) = hue, hsvImg(:,:,2) = sat, 
+% hsvImg(:,:,3) = val. Use hsv2rgb function to convert hsvImg to rgb image.
+
+if (nargin > 2) || (nargin == 0) 
+    error('incorrect number of argument');
+elseif nargin == 1
+    type = 31;
+elseif nargin == 2
+    if type > 30 || type < 1
+        type = 31;
+    end
+end
+
+hsvImg = zeros(size(Z,1), size(Z,2), 3);
 hue = (pi+angle(Z))/(2*pi);
 coloringType = type;
 y = imag(Z);
@@ -14,7 +35,6 @@ switch coloringType
         val = 1 -(1-val).^2;
         val = 0.6 +val *0.4;
     case 2
-        %coolviz1
         r = log(abs(Z))/(2*log(2));
         for n = 1:numel(x)
             if (x(n) > 2*pi) || (y(n) > 2*pi)
@@ -33,7 +53,6 @@ switch coloringType
         val = 1 -(1-val).^2;
         val = 0.6 + val *0.4;
     case 3
-        %coolviz2
         r = log(abs(Z))/log(2);
         sat = mod(r, 1);
         sat = 0.4 + sat *0.6;
@@ -48,7 +67,6 @@ switch coloringType
         
         sat = mod((val.*sat).^3, 1);
     case 4
-        %coolviz6
         %loop to limit absolute value of function from 0 to 2pi
         %and limit imaginary and real value of function from -pi to pi
         abs_z = abs(Z);
@@ -74,7 +92,6 @@ switch coloringType
         val = 1 -(1-val).^7;
         val = 0.3 + val *0.7;
     case 5
-        %Ferrisviz
         abs_z = abs(Z);
         for m = 1:numel(abs_z)
             if abs_z(m) < 0.1
@@ -101,17 +118,14 @@ switch coloringType
         
         val = 1 - abs(r);
         val = 1 - (1 - val).^5;
-        val = 0.1 + val *0.9;
-        
+        val = 0.1 + val *0.9;  
     case 6
-        %vizz2
         abs_z = abs(Z);
         val = mod((log(abs_z)/log(2)),1);
         val = 1 -(1-val).^3;
         val = 0.6 +val *0.4;
         sat = mod(abs(cos(2*pi*x).*sin(2*pi*y)).^0.5,1);
     case 7
-        %vizz2
         abs_z = abs(Z);
         val = mod((log(abs_z)/log(2)),1);
         val = 1 -(1-val).^3;
@@ -193,7 +207,6 @@ switch coloringType
         sat = mod(abs(cos(pi*x).*sin(pi*y)).^2.5,1);
         sat = 1 -(1-sat).^3;
     case 17
-        %vizz4
         abs_z = abs(Z);
         r = log(abs_z)/(2*log(2));
         val = mod(abs(cos(2*pi*r)).^1,1);
@@ -220,7 +233,6 @@ switch coloringType
         val = mod(abs(cos(10*pi*hue)).^0.12,1);
         sat = mod((val.*sat).^3,1);
     case 19
-        %vizz6
         abs_z= abs(Z);
         sat = mod(log(abs_z),1);
         sat = 0.4 +sat *0.6;
@@ -253,12 +265,10 @@ switch coloringType
                        cos(pi*x).*cos(pi*y)).^0.75,1);
         sat = (1-sat).^15;
     case 21
-        %vizz12
         abs_z = abs(Z);
         sat = ones(size(abs_z));
         val = 1-1./(1.1 +5*log(abs_z+1));
     case 22
-        %hans vizz
         abs_z= abs(Z);
         r=log(abs_z)/(log(2));
         sat = mod(log(abs_z),1);
@@ -275,7 +285,6 @@ switch coloringType
         sat = 1 -(1-sat).^6;
         sat = 0.1 +sat *0.9;
     case 23
-        %vizz13
         arg2 = mod(-angle(Z)/(2*pi),1);
         
         val = mod( log(abs(Z))/log(2),1);
@@ -296,8 +305,7 @@ switch coloringType
                       cos(pi*x).*cos(pi*y)).^0.5,1);
         sat = (1-sat).^5;
         val = val.*arg2.^0.3;
-    case 24        
-        %vizz10
+    case 24
         hue = mod(-angle(Z)/(2*pi)*0.17,0.17);
         arg2 = mod(-angle(Z)/(2*pi),1);
         abs_z= abs(Z);
@@ -322,14 +330,12 @@ switch coloringType
         sat = 1 -(1-sat).^5;
         val = val.*arg2.^0.3;
     case 25
-        %vizz
         abs_z = abs(Z);
         val = mod(log(abs_z)/log(2),1);
         val = 1 -(1-val).^3;
         sat = 0.6 + val *0.4;
         val = 0.4 + val *0.6;
     case 26
-        %vizz8
         r = abs(Z);
         a = 0.40824829046386301636 * y;
         b = 0.70710678118654752440 * x;
@@ -369,7 +375,6 @@ switch coloringType
         val = hs_v(:,:,3);
         val = val./max(val(:));
     case 27
-        %vizz9
         r = abs(Z);
         a = 0.40824829046386301636 * y;
         b = 0.70710678118654752440 * x;
@@ -434,12 +439,16 @@ switch coloringType
         val = 0.6 +val *0.4;
         sat = mod(abs(cos(2*pi*x).*sin(2*pi*y-pi/2)).^3,1);
         sat = 1 -(1-sat).^3;
-    otherwise
+    case 31
         abs_z = abs(Z);
         val = mod(log(abs_z)/log(2),1);
+        sat = mod(log(abs_z)/log(2),1);
         val = 1 -(1 - val).^3;
         sat = 0.6 +sat *0.4;
         val = 0.4 +val *0.6;
         sat = 1 -(1-sat).^3;
 end
+hsvImg(:,:,1) = hue;
+hsvImg(:,:,2) = sat;
+hsvImg(:,:,3) = val;
 end
