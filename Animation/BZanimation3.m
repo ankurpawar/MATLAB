@@ -1,3 +1,4 @@
+function BZanimation3
 %BZreaction animation
 %Belousov-Zhabotinsky Reaction animation
 %This MATLAB code is converted from Processing code available in this link
@@ -64,4 +65,5 @@ while k < 100 && ishandle(h1)
     set(h1, 'CData', hsv2rgb(img));
     pause(0.1);
     k = k + 1;
+end
 end
