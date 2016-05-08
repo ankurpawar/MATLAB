@@ -38,7 +38,7 @@ else
 end
 
 line([-pi/2 r*4*pi],[0 0])%base line
-
+h3 = line([0 0],[0 0]);%trace trochoid
 
 while (theta < MAX_ROTATION) && ishandle(hLine)
     % move circle
@@ -52,7 +52,7 @@ while (theta < MAX_ROTATION) && ishandle(hLine)
     cycloidPointsY = [cycloidPointsY lineYt(1)];
     
     % draw cycloid
-    line(cycloidPointsX,cycloidPointsY);
+    set(h3,'xdata',cycloidPointsX,'ydata',cycloidPointsY);
     
     pause(0.025)
     theta = theta+dtheta;
