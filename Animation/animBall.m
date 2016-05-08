@@ -1,27 +1,33 @@
-%animation of ball
-[k,l,m]=sphere(30);
-h1=surf(2.5*k,2.5*l,2.5+2.5*m,'Facecolor',[0 0 0],'edgecolor','none');
+function animBall
+% Simple animation of ball. The animation is not accurate.
+
+% number of points in sphere, 3 matrices of (N+1)x(N+1)
+nPointBall = 30;
+[ballX, ballY, ballZ] = sphere(nPointBall);
+ballRadius = 2.5;
+h1=surf(ballRadius * ballX...
+    , ballRadius*ballY...
+    , ballRadius + ballRadius*ballZ... % keep ball above zero
+    , 'Facecolor',[0 0 0]...
+    , 'edgecolor','none');
 
 camlight headlight,lighting phong
 hold on
 
-x=-20:0.5:20;
-y=x;
-[X,Y]=meshgrid(x,y);
-r=sqrt((X).^2+(Y).^2);
-r1=sqrt((-2+X).^2+(0+Y).^2);
-r2=sqrt((-4+X).^2+(0+Y).^2);
-r3=sqrt((-6+X).^2+(0+Y).^2);
-r4=sqrt((-8+X).^2+(0+Y).^2);
-r5=sqrt((-10+X).^2+(0+Y).^2);
-r6=sqrt((-12+X).^2+(0+Y).^2);
+% Mesh for water like surface, dimension of surface is
+% MAX_POINTS x MAX_POINTS
+MAX_X = 20;
+MIN_X = -20;
+MAX_POINTS = 100;
+x = linspace(MIN_X, MAX_X, MAX_POINTS);
+[X,Y] = meshgrid(x, x);
 
-
-z=sinc(0.2*r);
-h=surf(X,Y,z,'Facecolor','blue','edgecolor','none');
-camlight headlight; lighting phong
-axis([-20 20 -20 20 -20 20]),view(3)
-
+Z = ones(size(X));
+hLiquid = surf(X,Y,Z,'Facecolor','blue','edgecolor','none');
+camlight headlight
+lighting phong
+axis([-20 20 -20 20 -20 20])
+view(3)
 
 hold off
 axis off
@@ -29,26 +35,28 @@ set(gcf,'color',[1 1 1])
 view(113,45)
 grid off
 
-z1=[];
-%M = moviein(91);
-n=0;
-while (n<=90)&&ishandle(h)
-    set(h1,'xdata',n/5+2.5*k,'zdata',...
-        2.5+2.5*m+abs(9*exp(-0.03*n)*sin(0.9*pi*n)));
+% Function handle for creating ripples on 2d surface.
+% sinc(sqrt(x^2+y^2)-pi*t), sqrt(x^2+y^2) creates 2 ripples in sinc
+% function. Changing x will change position of ripples. Changing t will
+% move ripple outwards.
+ringFunc = @(tx,x,ty,y)(sqrt((tx+x).^2+(ty+y).^2));
+rippleFunc = @(r,t)(0.4*sinc(r-0.4*t*pi));
+
+n = 0;
+while (n <= 90) && ishandle(hLiquid)
+    % Set X and Z postition of ball
+    % abs(exp(-t)*sin(pi*t)), this is similar to falling ball
+    set(h1, 'xdata', n/5+ballRadius*ballX...
+        ,'zdata',ballRadius+ballRadius*ballZ...
+        +abs(9*exp(-0.03*n)*sin(0.9*pi*n)));
     
-    
-    z1=0.4*sinc(r-0.4*n*pi);
-    z2=0.4*sinc(r1-0.4*(n-10)*pi);
-    z3=0.4*sinc(r2-0.4*(n-20)*pi);
-    z4=0.4*sinc(r3-0.4*(n-30)*pi);
-    z5=0.4*sinc(r4-0.4*(n-40)*pi);
-    z6=0.4*sinc(r5-0.4*(n-50)*pi);
-    z7=0.4*sinc(r6-0.4*(n-60)*pi);
-    
-    z=z1+z2+z3+z4+z5+z6+z7;
-    set(h,'zdata',z);
-    %M(:,n+1)=getframe;
-    n=n+1;
-    drawnow
+    % Calculate new ripples after some phase shift
+    Z = rippleFunc(ringFunc(0,X,0,Y),n);
+    for m = 2:2:12
+        Z = Z + rippleFunc(ringFunc(-m,X,0,Y),n-m*5);
+    end
+    set(hLiquid,'zdata',Z);
+    pause(0.075);
+    n = n+1;
 end
-%movie(M,1,15);
+end
