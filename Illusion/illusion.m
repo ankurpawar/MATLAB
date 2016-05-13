@@ -42,3 +42,7 @@ for i = 1:num_row
 end
 set(gcf,'color',[0.4 0.6 0.7]);
 axis off equal
+% export_fig function is available then save figure as png file
+if exist('export_fig') > 0
+    export_fig('png','illusion');
+end

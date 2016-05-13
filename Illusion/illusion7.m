@@ -28,5 +28,7 @@ for n = 1:5
 end
 set(gcf,'color',[0.72 0.6 0.7]);
 axis off equal
-%If you have export_fig then uncomment below line,else download it.
-%export_fig png illusion7
+% export_fig function is available then save figure as png file
+if exist('export_fig') > 0
+    export_fig('png','illusion7');
+end

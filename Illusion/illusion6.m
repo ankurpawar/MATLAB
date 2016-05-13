@@ -60,4 +60,3 @@ switch choice
         x = [x left_points;right_points x];
         y = [top_points y2;y2 bottom_points];
 end
-
