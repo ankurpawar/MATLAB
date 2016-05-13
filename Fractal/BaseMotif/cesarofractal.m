@@ -1,46 +1,102 @@
-%cesaro fractal
-phi=[0 pi/2 pi/2 pi/2];
-%theta=[85*pi/180 -170*pi/180 85*pi/180];
-%theta=[-85*pi/180 +170*pi/180 -85*pi/180];
-%theta=[pi/3 -2*pi/3 pi/3];
+function cesarofractal
+% cesaro fractal
 
-%theta=[80*pi/180 -160.2*pi/180 80*pi/180];
-theta=[-80*pi/180 160*pi/180 -80*pi/180];
+% Get l system data
+fractalData = getFractalData;
+[nRow, nColumn] = size(fractalData);
+% get user input from command window
+choice = getUserInput(['Enter a choice from 1 to ' num2str(nColumn) ...
+    ':'] , 1, nColumn);
 
+base = fractalData(choice).base;
+motif = fractalData(choice).motif;
+MAX_ITERATION = fractalData(choice).maxIteration;
 
-%phi=[0 2*pi/3 2*pi/3];
-%theta=[pi/3 -2*pi/3 pi/3];
-%theta=[-pi/3 2*pi/3 -pi/3];
+nIteration = getUserInput(['Enter number of iteration from 1 to ' ...
+    num2str(MAX_ITERATION) ':'], 1, MAX_ITERATION);
 
-iter=5;
-angle_new=[];
-for n=1:iter
-   angle_new=[angle_new theta(1) angle_new theta(2) angle_new theta(3) angle_new];
+angle_new = [];
+
+% Prepare motif
+for n = 1 : nIteration
+    angle_new = [angle_new motif(1)...
+        angle_new motif(2)...
+        angle_new motif(3)...
+        angle_new];
 end
 
-angle_new=[phi(1) angle_new ...
-           phi(2) angle_new ...
-           phi(3) angle_new ...
-           phi(4) angle_new ...
-           0];
+% Prepare base
+angle_new = [base(1) angle_new ...
+    base(2) angle_new ...
+    base(3) angle_new ...
+    base(4) angle_new ...
+    0];
 
+len_angle = length(angle_new);
+x_arr = zeros(len_angle,1);
+y_arr = x_arr;
+x = 0;
+y = 0;
+xn = 0;
+yn = 0;
+motif = 0;
+%length of each section
+len = 1;
 
-len_angle=length(angle_new);
-x_arr=zeros(len_angle,1);
-y_arr=zeros(len_angle,1);
-x=0;y=0;x1=0;y1=0;
-angle_2=0;
-for n=1:len_angle
-    [x1,y1]=pol2cart(angle_2,1);
-    angle_2=angle_new(n)+angle_2;
-    x=x+x1;
-    y=y+y1;
-    x_arr(n)=x;
-    y_arr(n)=y;
+for n = 1 : len_angle
+    [xn,yn] = pol2cart(motif, len);
+    motif = angle_new(n)+motif;
+    x = x+xn;
+    y = y+yn;
+    x_arr(n) = x;
+    y_arr(n) = y;
 end
-%plot(x_arr,y_arr,'linewidth',1),axis off square
-x_arr=[x_arr;nan];
-y_arr=[y_arr;nan];
-%patch(x_arr,y_arr,sqrt(x_arr.^2+y_arr.^2), 'edgecolor','flat','facecolor','none','facevertexcdata',hsv(length(x_arr)));
-patch(x_arr,y_arr,sqrt(x_arr.^2+y_arr.^2), 'edgecolor','flat','facecolor','none');
-axis equal off ;colormap hsv(256)
+
+% black color
+figure
+line(x_arr,y_arr,'color','k');
+axis equal off
+set(gcf,'color',[1 1 1]);
+
+% hsv color
+figure
+nColor = 128;
+cmap = makeColorMap(rand(1,3), rand(1,3), rand(1,3), nColor);
+colormap(cmap);
+x_arr = [x_arr;nan];
+y_arr = [y_arr;nan];
+cIndex = mod(1:length(x_arr), nColor)+1;
+patch(x_arr, y_arr, cIndex...
+    ,'edgecolor', 'flat', 'facecolor', 'none');
+axis equal off
+set(gcf,'color',[1 1 1]);
+end
+
+function fractalData = getFractalData
+% Function return structure array of base, motif and maximum iteration.
+% Iteration are limited due to memory and time.
+fractalData(1).base = [0 pi/2 pi/2 pi/2];
+fractalData(1).motif = [85 -170 85]*pi/180;
+fractalData(1).maxIteration = 5;
+
+fractalData(2).base = [0 pi/2 pi/2 pi/2];
+fractalData(2).motif = [-85 170 -85]*pi/180;
+fractalData(2).maxIteration = 5;
+
+fractalData(3).base = [0 pi/2 pi/2 pi/2];
+fractalData(3).motif = [-80 160 -80]*pi/180;
+fractalData(3).maxIteration = 5;
+end
+
+function choice = getUserInput(promptStr, minNum, maxNum)
+% return the user input and check the range of input
+choice = input(promptStr);
+if isempty(choice) || ~isnumeric(choice)
+    error('enter a number');
+elseif (choice < minNum) || (choice > maxNum)
+    error(['enter a number between 1 to ' num2str(maxNum)]);
+elseif isfloat(choice)
+    %if choice is floating point value then truncate the fractional part
+    choice = choice - mod(choice,1);
+end
+end
