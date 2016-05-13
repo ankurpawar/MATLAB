@@ -6,6 +6,7 @@ COLORMAP=copper(n);
 rect(0,0,1,1,n);
 axis([-0.75 0.75 -0.75 0.75]);
 axis equal off
+end
 
 function rect(x,y,wide,high,n)
 global COLORMAP
@@ -18,5 +19,5 @@ if n>0
     rect(x-wide/4,y-high/4,wide/2,high/2,n-1);
     rect(x+wide/4,y-high/4,wide/2,high/2,n-1);
 end
-return
+end
 

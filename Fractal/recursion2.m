@@ -10,7 +10,7 @@ high=1;
 rect(x,y,wide,high,n);
 axis([0 2 0 2])
 axis equal off
-return
+end
 
 function rect(x,y,wide,high,n)
 global COLORMAP
@@ -26,4 +26,4 @@ if n>0
     patch(xx,yy,n*ones(size(yy))*0,'k',...
          'facecolor',COLORMAP(n,:),'edgecolor','none');
 end
-return
+end
