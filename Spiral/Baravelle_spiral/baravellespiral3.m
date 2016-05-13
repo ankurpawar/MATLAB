@@ -12,12 +12,9 @@ for k=1:total
     [x,y]=pol2cart(t+theta,r);
     patch(x+xold,y+yold,cmap(k,:),'edgecolor','none');
     patch(-(x+xold)+2,-(y+yold)+2,cmap(k,:),'edgecolor','none');
-    %patch(-(x+xold)+2,(y+yold),'r');
-    %patch((x+xold),-(y+yold)+2,'r');
     xold=x(end)+xold;
     yold=y(end)+yold;
-    theta=theta-pi/4;    
+    theta=theta-pi/4;
     l=l/sqrt(2);
 end
 axis equal off
-
