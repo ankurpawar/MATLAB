@@ -1,24 +1,26 @@
-%spiral hexagon
 function spiralHexagon
-t=linspace(0,2*pi,7); %points for triangle
+%spiral hexagon
+t=linspace(0,2*pi,7); %points for hexagon
 len=1;
 [x,y]=pol2cart(t,1);
-theta=pi/30;
-phi=pi*30/180;  
+% rotation of inner hexagon, less value better the spiral effect.
+theta=pi/50;
+% angle between sides of hexagon
+phi=pi*30/180;
+% number of inner hexagon.
+nHexagon=100;
+colormap=makeColorMap(rand(1,3),[1 1 1],rand(1,3),nHexagon);
 
-numSquare=40;
-colormap=hot(numSquare);
-
-for n=1:numSquare
-    patch(len*x,len*y,'r','facecolor',colormap(n,:),'edgecolor',[1 1 1]);
+for n=1:nHexagon
+    patch(len*x,len*y,'r','facecolor',colormap(n,:)...
+        ,'edgecolor','none');
     len=len*cos(phi)/cos(phi-theta);
     [x,y]=trans2d(x,y,0,0,theta); %rotate by theta
 end
-
-axis([-1.2 1.2 -1.2 1.2])
 axis equal off
+end
 
 function [xx,yy]=trans2d(x,y,tx,ty,phi)
-   xx=x.*cos(phi)-y.*sin(phi)+tx;
-   yy=x.*sin(phi)+y.*cos(phi)+ty;
-return
+xx=x.*cos(phi)-y.*sin(phi)+tx;
+yy=x.*sin(phi)+y.*cos(phi)+ty;
+end
