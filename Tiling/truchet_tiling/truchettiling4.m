@@ -1,26 +1,22 @@
-%truchet tiling
 function truchettiling4
-
-%cmap=hsv(total^2);
-
+%truchet tiling
 choice=1;
 check_arr=repmat([1 0;0 1],16,10);
 [row column]=size(check_arr);
+cmap=hsv(row*column);
 for n=1:row
     for m=1:column
-        
         choice=check_arr(n,m);
         r=rand;
-        
         [x,y]=truchet(choice,r);
-        patch(x+n,y+m,[0 0.5 1],'edgecolor',[0 0.5 1]);
-        %patch(x+n,y+m,'k','facecolor',cmap(n*m,:),'edgecolor','none');
+        patch(x+n,y+m,'k','facecolor',cmap(n*m,:),'edgecolor','none');
         
     end
 end
 axis equal off
+end
 
-function [x,y]=truchet(choice,ran)
+function [x,y] = truchet(choice,ran)
 noofpoints=15;
 r=0.5;
 if choice==0
@@ -65,4 +61,5 @@ elseif choice==1
         x=[x1 1 x2 0];
         y=[y1 0 y2 1];
     end
+end
 end

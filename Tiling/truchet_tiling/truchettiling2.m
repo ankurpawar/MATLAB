@@ -1,6 +1,5 @@
-%truchet tiling
 function truchettiling2
-
+%truchet tiling
 total=30;
 cmap=hsv(total*2);
 colors=pink(4);
@@ -16,15 +15,15 @@ for n=1:total
         else
             [x,y]=truchet(4);
         end
-        %patch(x+n,y+m,'k','facecolor',cmap(n+m,:),'edgecolor',cmap(n+m,:));
-        patch(x+n,y+m,'k','facecolor',colors(randi(4),:),'edgecolor','none');
+        patch(x+n,y+m,'k','facecolor',cmap(n+m,:)...
+            ,'edgecolor',cmap(n+m,:));
     end
 end
 axis equal off
+end
 
 function [x,y]=truchet(choice)
 switch(choice)
-    
     case 1
         x=[0 1 0];
         y=[0 0 1];
@@ -37,4 +36,5 @@ switch(choice)
     case 4
         x=[1 1 0];
         y=[0 1 1];
+end
 end

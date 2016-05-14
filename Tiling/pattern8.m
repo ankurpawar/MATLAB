@@ -1,4 +1,3 @@
-%pattern8
 function pattern8
 cmap=pink(4);
 rough=-1;
@@ -16,7 +15,7 @@ for m=1:10
     rough=-rough;
 end
 axis equal off
-
+end
 
 function [xb,yb]=piece_(choice)
 switch choice
@@ -31,7 +30,7 @@ switch choice
         r=1;
         [x,y]=pol2cart(t,r);
         [xa,ya]=polybool('subtraction',x,y,x-1,y-1);
-        [xb,yb]=polybool('subtraction',xa,ya,x-1,y+1);    
+        [xb,yb]=polybool('subtraction',xa,ya,x-1,y+1);
     case 3
         t=2*pi:-1/(10*pi):0;
         r=1;
@@ -43,7 +42,6 @@ switch choice
         r=1;
         [x,y]=pol2cart(t,r);
         [xa,ya]=polybool('subtraction',x,y,x-1,y-1);
-        [xb,yb]=polybool('subtraction',xa,ya,x+1,y-1);        
-    
-        
+        [xb,yb]=polybool('subtraction',xa,ya,x+1,y-1);     
+end
 end

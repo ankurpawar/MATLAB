@@ -18,10 +18,9 @@ for ky=1:totaly
             [x,y]=truchet(1);
         else
             [x,y]=truchet(0);
-        end
-        
-        patch(x+kx*gapx1+rough,y+ky*gapy2,[0.4 0.5 0.7],'edgecolor',[0.4 0.5 0.7]);
-        
+        end    
+        patch(x+kx*gapx1+rough,y+ky*gapy2,[0.4 0.5 0.7]...
+            ,'edgecolor',[0.4 0.5 0.7]);
     end
 end
 
@@ -29,12 +28,12 @@ for ky=1:totaly
     rough=-rough;
     for kx=1:totalx
         [x,y]=transform2d(px,py,0,0,pi/6-2*pi/3,0,0);
-        patch(x+kx*gapx1+rough,y+ky*gapy2,'k','facecolor','none','edgecolor',[0.6 0.6 0.6]);
-        %patch(x+kx*gapx1+rough,y+ky*gapy2,[0.4 0.5 0.7],'edgecolor',[0.4 0.5 0.7]);
+        patch(x+kx*gapx1+rough,y+ky*gapy2,'k'...
+            ,'facecolor','none','edgecolor',[0.6 0.6 0.6]);
     end
 end
 axis equal off
-
+end
 
 function [x,y]=truchet(choice)
 t=0:pi/3:5*pi/3;
@@ -63,10 +62,9 @@ else
     [a1x,a1y]=pol2cart(a1,sin(pi/6)*r);
     [a2x,a2y]=pol2cart(a2,sin(pi/6)*r);
     [a3x,a3y]=pol2cart(a3,sin(pi/6)*r);
-  
+    
     x=[a1x+px(1) px(2) a2x+px(3) px(4) a3x+px(5) px(6)];
     y=[a1y+py(1) py(2) a2y+py(3) py(4) a3y+py(5) py(6)];
-    [x,y]=transform2d(x,y,0,0,pi/6,0,0); 
+    [x,y]=transform2d(x,y,0,0,pi/6,0,0);
 end
-
-
+end
