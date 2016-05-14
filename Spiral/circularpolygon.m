@@ -21,4 +21,4 @@ for t=1:total
     x = circshift(x ,[1 1]);
     y = circshift(y,[1 1]);
 end
-axis equal
+axis equal off

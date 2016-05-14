@@ -1,6 +1,6 @@
 function generalBaravelle
 %generalized baravelle spiral
-% N = 3 triangle, N = 4 square
+% N = 3 triangle, N = 4 square, N = 5 penatgon, N = 6 hexagon
 % get user input from command window
 nSideMin = 3;
 nSideMax = 8;
