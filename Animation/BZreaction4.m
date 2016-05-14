@@ -1,7 +1,7 @@
 function BZreaction4
 % Belousov-Zhabotinsky Reaction animation
 % This MATLAB code is converted from Processing code available in this link
-% http://www.aac.bartlett.ucl.ac.uk/processing/samples/bzr.pdf
+% http://discovery.ucl.ac.uk/17241/1/17241.pdf
 
 % version 2. Corrected the drift of pixels as suggested by Jonh.
 
