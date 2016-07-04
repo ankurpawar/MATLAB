@@ -1,14 +1,14 @@
-%lissajous1
-%Damped 2D Lissajous figures:parametric equation
-%x=c*t.*sin(a*t);
-%y=c*t.*sin(b*t+phi);
-%a=frequency 1,b=frequency 2,phi=phase difference,t=time,c=constant
-prompt = {'Enter choice:'};
-dlg_title = 'Number';
-num_lines = 1;
-def = {'1'};
-answer = inputdlg(prompt,dlg_title,num_lines,def);
-choice=str2num(answer{1});
+function lissajous1
+% Damped 2D Lissajous figures:parametric equation
+% x = c*t.*sin(a*t);
+% y = c*t.*sin(b*t+phi);
+% a = frequency 1, b = frequency 2, phi = phase difference,
+% t = time, c = constant
+MAX_LISSAJOUS_CURVE = 10;
+% get user input from command window
+choice = getUserInput(['Enter a choice from 1 to ' num2str(MAX_LISSAJOUS_CURVE) ...
+    '\n'] , 1, MAX_LISSAJOUS_CURVE);
+
 switch choice
     case 1  
             t=0:0.05:432;
@@ -73,17 +73,20 @@ switch choice
 end
 x=t.*sin(a*t);
 y=t.*sin(b*t+phi);
-plot(x,y,'color',rand(1,3)/2)
+line(x,y)
 axis equal off
-str1(1) = {'$ x=\theta sin(a \theta)$'};
-str1(2) = {'$ y=\theta sin(b \theta+\phi)$'};
-if phi~=0
-  str1(3) = {['$\theta=' num2str(min(t)) ':0.05:'  num2str(max(t))  ',phi=\frac{\pi}{' num2str(pi/phi) '}$']};
-else
-  str1(3) = {['$\theta=' num2str(min(t)) ':0.05:'  num2str(max(t))  ',phi=0$']};
+set(gcf,'color',[1 1 1]);
 end
-str1(4) = {['$a=' num2str(a)  ',b=' num2str(b) '$']};
-text('Interpreter','latex',...
-       'String',str1,...
-       'Position',[max(max(x)) max(max(y))],...
-       'FontSize',20)
+
+function choice = getUserInput(promptStr, minNum, maxNum)
+% return the user input and check the range of input
+choice = input(promptStr);
+if isempty(choice) || ~isnumeric(choice)
+    error('enter a number');
+elseif (choice < minNum) || (choice > maxNum)
+    error(['enter a number between 1 to ' num2str(maxNum)]);
+elseif isfloat(choice)
+    %if choice is floating point value then truncate the fractional part
+    choice = choice - mod(choice,1);
+end
+end
