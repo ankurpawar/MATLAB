@@ -24,8 +24,6 @@ set(gcf,'color',[1 1 1]); %set background color to white
 % If export_fig function is available the click this button.
 % An antialased PNG image will be saved in current working
 % directory with name colorLeaves
-callbackStr='export_fig(''png'',''colorLeaves'')'; 
-sld2Hndl=uicontrol( ...
-          'Style','pushbutton', ...
-          'Position',[10 10 40 20], ...
-          'Callback',callbackStr);
+if exist('export_fig') > 0
+    export_fig('png','-nocrop','colorLeaf');
+end
