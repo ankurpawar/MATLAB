@@ -39,7 +39,7 @@ close(h_wait)
 figure
 z = ones(size(t));
 verts  = {[5*y' 5*x' z']};
-daspect([1 1 1])
+axis equal
 tubeWidth = 0.2;
 h1 = streamtube(verts, tubeWidth);  
 set(h1,'Facecolor',[rand(1,3)],'edgecolor','none');
@@ -50,7 +50,7 @@ view(3)
 
 % export_fig function is available then save figure as png file
 if exist('export_fig') > 0
-    export_fig('png',['cornuSpiralTube' num2str(choice)]);
+    export_fig('png','-nocrop',['cornuSpiralTube' num2str(choice)]);
 end
 
 %ribbon plot
@@ -59,7 +59,7 @@ figure
 twistangle = {t/200};
 ribbonWidth = 0.3;
 verts = {[5*y' 5*x' z']};
-daspect([1 1 1])
+axis equal
 h2 = streamribbon(verts, twistangle, ribbonWidth);  
 set(h2,'Facecolor',[rand(1,3)],'edgecolor','none');
 set(gcf,'color',[1 1 1]);
@@ -70,12 +70,10 @@ camlight(51,50);
 lighting phong
 material metal
 view(3)
-
 % export_fig function is available then save figure as png file
 if exist('export_fig') > 0
-    export_fig('png',['cornuSpiralRibbon' num2str(choice)]);
+    export_fig('png','-nocrop',['cornuSpiralRibbon' num2str(choice)]);
 end
-
 end
 
 function eulerSpiralData = getSpiralData
