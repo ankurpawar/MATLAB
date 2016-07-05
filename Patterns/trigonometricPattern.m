@@ -21,32 +21,26 @@ function trigonometricPattern
 % color map
 %
 MAX_PATTERN = 117; %there are 117 different pattern for now
-prompt = {'Enter choice:'};
+WIDTH = 1000; %x axis resolution
+HEIGHT = 1000; %y axis resolution
+MAX_LIM = 2*pi; %range of 2d grid, x [-2pi,2pi], y [-2pi,pi]
+OUT_IMAGE_TYPE = 3; %this value decides the output image type
 
-dlg_title = ['1 to ' num2str(MAX_PATTERN)];
-num_lines = 1;
-def = {'1'};
-answer = inputdlg(prompt,dlg_title,num_lines,def);
+% get user input from command window
+choice = getUserInput(['Enter a choice from 1 to ' num2str(MAX_PATTERN) ...
+    '\n'] , 1, MAX_PATTERN);
 
-% some error hadling
-if isempty(answer)
-    error('enter a choice');
-end
-
-choice = str2num(answer{1});
-if isempty (choice)
-    error('enter a number');
-elseif (choice < 1) || (choice > MAX_PATTERN)
-    error(['enter a number between 1 to ' num2str(MAX_PATTERN)]);
-end
+imgPromptStr = ['Enter output image type from 1 to ' ...
+    num2str(OUT_IMAGE_TYPE) ',\n'...
+    '1. 256 color indexed,\n'...
+    '2. indexed image with ditehring \n'];
+outImage = getUserInput(imgPromptStr, 1, OUT_IMAGE_TYPE);
 
 % get the amplitude based on the choice
-[zval,colorRange] = calculatePattern(choice);
-
+[zval,colorRange] = calculatePattern(choice, WIDTH, HEIGHT, MAX_LIM);
 
 % zval vary from negative to positive
 % to show indexed image get min and max value in array
-
 zval_min = min(zval(:));
 zval_max = max(zval(:));
 
@@ -54,45 +48,59 @@ clims = [zval_min zval_max];
 caxis(clims);
 imagesc(zval,clims);
 axis equal
+axis([0 WIDTH 0 HEIGHT]);
 
-outImage = 3; %this value decides the output image type
 switch outImage
     case 1 % indexed image with 256 color
         %number of colors to represent the amplitude of function.
         nColor = 256;
         cmap = getColors(colorRange, nColor);
         colormap(cmap);
+        %scale zval values in range of 0-255
         zval2 = (zval - zval_min);
         zval2 = zval2./max(zval2(:));
-        zval2 = uint8(nColor*zval2);
-        imwrite(zval2, cmap, ['trig2pattern_' num2str(choice) '.png'], 'png');
+        zval2 = uint8((nColor-1)*zval2);
+        imwrite(zval2, cmap, ['trig1pattern_' num2str(choice) '.png'], 'png');
         
-    case 2 % indexed image with 32 color
-        %number of colors to represent the amplitude of function.
-        nColor = 32;
-        cmap = getColors(colorRange, nColor);
-        colormap(cmap);
-        zval2 = (zval - zval_min);
-        zval2 = zval2./max(zval2(:));
-        zval2 = uint8(nColor * zval2);
-        imwrite(zval2, cmap, ['trig3pattern_' num2str(choice) '.png'], 'png');
-        
-    case 3 %indexed image with dithering
+    case 2 %indexed image with dithering
         nColor = 256;
         cmap = getColors(colorRange, nColor);
         colormap(cmap);
-        rgb = sc(zval, clims, cmap); %sc function apply dithering to RGB
-        [X,map] = rgb2ind(rgb, nColor);
-        imwrite(X, map, ['trigpattern_' num2str(choice) '.png'],'png');
+        %scale zval values in range of 0-255
+        zval2 = (zval - zval_min);
+        zval2 = zval2./max(zval2(:));
+        zval2 = uint8((nColor-1) * zval2);
+        
+        % values in zval is in a range of 0-255. 0 the first color in
+        % colormap. MATLAB has no inbuilt function that can dither indexed
+        % images. So convert to rgb first, then apply dithering then back
+        % to indexed again.
+        rgb = ind2rgb(zval2, cmap);
+        [X,map] = rgb2ind(rgb, nColor); %apply dithering to RGB
+        imwrite(X, map, ['trig2pattern' num2str(choice) '.png'],'png');
+        [X,map] = rgb2ind(rgb, cmap); %apply dithering to RGB
+        imwrite(X, map, ['trigpattern' num2str(choice) '.png'],'png');
 end
-axis equal
+end
+
+function choice = getUserInput(promptStr, minNum, maxNum)
+% return the user input and check the range of input
+choice = input(promptStr);
+if isempty(choice) || ~isnumeric(choice)
+    error('enter a number');
+elseif (choice < minNum) || (choice > maxNum)
+    error(['enter a number between 1 to ' num2str(maxNum)]);
+elseif isfloat(choice)
+    %if choice is floating point value then truncate the fractional part
+    choice = choice - mod(choice,1);
+end
 end
 
 function cmap = getColors(colorRange, nColor)
 % A wrapper function for makeColorMap. It will return color map based on
 % the colorRange array and nColors.
 if size(colorRange,1) == 2
-    cmap = makeColorMap(colorRange(1,:), colorRange(2,:), nColor)
+    cmap = makeColorMap(colorRange(1,:), colorRange(2,:), nColor);
 else
     cmap = makeColorMap(colorRange(1,:)...
         , colorRange(2,:)...
@@ -101,22 +109,22 @@ else
 end
 end %getColor ends
 
-function [zval,colorRange] = calculatePattern(type)
-%the ouput image resolution will be 1000x1000
-WIDTH = 1000; %number of points in x axis
-HEIGHT = 1000; %number of points in y axis
-theta = 2*pi;
+function [zval,colorRange] = calculatePattern(type, width, height, lim)
+if nargin ~= 4
+    error('incorrect number of argument');
+end
+theta = lim;
 %Generate linearly spaced points from -theta to theta
-x = linspace(-theta, theta, WIDTH);
-y = linspace(-theta, theta, HEIGHT);
+x = linspace(-theta, theta, width);
+y = linspace(-theta, theta, height);
 
 % Create a linear 2d grid
 % X is 2d a array, column value are varying and row values are constant
 % Y is 2d a array, row value are varying and column values are constant
-[X, Y] = ndgrid(x, y);
+[X, Y] = meshgrid(x, y);
 
 % Allocate space for output
-zval = zeros(WIDTH, HEIGHT);
+zval = zeros(height, width);
 colorRange = [1 1 1;0 0 0];
 switch type
     case 1
@@ -710,7 +718,5 @@ switch type
             .*cos(sin(cos(X+Y).*sin(Y-X).*Y)...
             -cos(sin(Y-X).*cos(X+Y).*X));
         colorRange = [1 1 1; 0.8 0.3 0.4; 1 0.9 0.7];
-        
 end %switch type end
-
 end %calculatePattern end
