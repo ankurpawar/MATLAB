@@ -60,13 +60,13 @@ set(gcf,'color',[1 1 1]);
 
 % hsv color
 figure
-nColor = 128;
-cmap = makeColorMap(rand(1,3), rand(1,3), rand(1,3), nColor);
-colormap(cmap);
 x_arr = [x_arr;nan];
 y_arr = [y_arr;nan];
-cIndex = mod(1:length(x_arr), nColor)+1;
-patch(x_arr, y_arr, cIndex...
+nColor = 256;
+cmap = makeColorMap(rand(1,3), rand(1,3), nColor);
+colormap(cmap);
+cIndex = 1:length(x_arr);
+patch(x_arr, y_arr, x_arr+y_arr...
     ,'edgecolor', 'flat', 'facecolor', 'none');
 axis equal off
 set(gcf,'color',[1 1 1]);
