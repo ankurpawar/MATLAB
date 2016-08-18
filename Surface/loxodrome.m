@@ -1,3 +1,4 @@
+function loxodrome
 %% Loxodrome
 % Script to generate loxodrome
 %
@@ -52,12 +53,14 @@ camlight
 lighting phong
 light('Position',[0.5 -10 0.2])
 light('Position',[-10 2 0.2])
-set(gcf,'position',[5 5 1200 700])
+set(gcf,'color',[1 1 1]);
 set(gcf,'Renderer','zbuffer');
-axis equal on tight,view(3)
+axis equal on tight
+view(3)
 
-callbackStr='export_fig(''png'',''loxo1'')';
-sld2Hndl=uicontrol( ...
-    'Style','pushbutton', ...
-    'Position',[10 10 40 20], ...
-    'Callback',callbackStr);
+% export_fig function is available then save figure as png file. Create a
+% button with callback that will save the figure as antialiased image.
+if exist('export_fig') > 0
+    export_fig('png','-nocrop','-a2','loxodrome');
+end
+end
