@@ -1,10 +1,6 @@
 function continuousDwell
-%continuousDwell Mandelbrot set
-%this script takes about 2 seconds
-%to complete the fractal
-%remove the comment in line 62 to 67
-%to save the fractal as a png file
-%the function ind2rgb8 takes sometime
+% Continuous dwell mandelbrot set. This script generates mandelbrot set
+% with continuous coloring.
 
 % ouput image resolution, WIDTHxHEIGHT
 WIDTH = 1000; %number of points in x axis
