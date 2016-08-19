@@ -5,11 +5,11 @@ function mandelbrot_small_rgb
 %Takes more time to complete the fractal as compared to methods stroing the
 %whole image in memory.First the header of BMP file is created and written
 %to disk.Then during the loop each point in a row is calculated and written
-%to the disk.
-WIDTH = 500;
-HEIGHT = 500;
+%to the disk. For 5000x5000 images this script takes 51 seconds.
+WIDTH = 5000;
+HEIGHT = 5000;
 MAX_ITERATIONS = 256;
-bmpFile = 'bigmandel';
+bmpFile = 'bigmandel_rgb';
 
 fid = fopen([bmpFile '.bmp'],'w');
 x = linspace(-1.5,0.6,WIDTH);
@@ -23,7 +23,7 @@ xn =  0;
 yn =  0;
 zval =  zeros(WIDTH,1);
 nColors = MAX_ITERATIONS;
-cmap = gray(nColors);
+cmap = flipud(gray(nColors));
 
 %prepare bmp header
 bmpStruct = struct([]);

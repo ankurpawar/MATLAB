@@ -2,15 +2,14 @@ function mandelbrot_small_indexed
 %function generate mandelbrot set image.Code calculate the mandelbrot
 %points and color it according to the colormap.This function doesn't store
 %big array in memory. Calculate row one by one and write to a BMP file.
-%Takes more time to complete the fractal as compared to methods stroing the
+%Takes more time to complete the fractal as compared to methods storing the
 %whole image in memory.First the header of BMP file is created and written
 %to disk.Then during the loop each point in a row is calculated and written
-%to the disk.
-
-WIDTH = 500;
-HEIGHT = 500;
+%to the disk. For 5000x5000 images this script takes 51 seconds.
+WIDTH = 5000;
+HEIGHT = 5000;
 MAX_ITERATIONS = 256;
-bmpFile = 'bigmandel2';
+bmpFile = 'bigmandel_indexed';
 
 fid = fopen([bmpFile '.bmp'],'w');
 x = linspace(-1.5,0.6,WIDTH);
@@ -85,6 +84,5 @@ for n = HEIGHT: -1: 1
     end
 end
 toc
-%Close the BMP file
-st=fclose(fid);
+st = fclose(fid); % Close the BMP file
 end
